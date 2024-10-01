@@ -10,8 +10,7 @@
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
-
-      
+     
     </v-toolbar>
   </div>
 </template>
