@@ -1,7 +1,7 @@
 <template>
 
-  <v-card transition="fade-transition" :href="`/blog/${post.slug.current}`">
-    <v-img class="mb-2" aspect-ratio="16/9" :src="post.image.asset.url" cover height="225"></v-img>
+  <v-card transition="fade-transition" :href="`/blog/${post.slug.current}`" :class="firstCard ? 'first-card' : ''">
+    <v-img class="mb-2" :src="post.image.asset.url" cover :height="firstCard ? 450 : 225"></v-img>
     <v-card-tile class="text-h5 ma-4 d-block"> {{ post.title }} </v-card-tile>
     <v-card-subtitle>By {{ post.author }}</v-card-subtitle>
     <v-card-text>{{ post.excerpt }}</v-card-text>
@@ -17,7 +17,7 @@ const imageBuilder = imageUrlBuilder(sanity);
 
 export default {
   name: 'PostCard',
-  props: ['post'],
+  props: ['post', 'firstCard'],
   setup(props) {
     console.log(props.post)
   },

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Nav />
-    <v-main>
+    <v-main class="content-container">
       <router-view />
     </v-main>
 
@@ -15,5 +15,10 @@
 <style>
 .content {
   padding: 60px 0;
+}
+
+.content-container {
+  max-width: 1440px;
+  margin: 60px auto 0;
 }
 </style>

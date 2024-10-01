@@ -1,32 +1,33 @@
 <template>
-  <h1>Welcome Altruist Sanity Blog</h1>
+  <h1 class="ma-6 text-h2 w-33">Welcome Altruist Sanity Blog</h1>
   <div v-if="error" class="error">
     {{ error }}
   </div>
-  <v-container class="fill-height">
+  <v-container>
     <v-row>
       <div class="loading" v-if="loading">Loading...</div>
-      <v-col cols="6" v-for="post in posts[page]" class="" :key="post._id">
-        <PostCard :post="post" />
+      <v-col :lg="index == 0 ? 12 : 6" md="12" v-for="(post, index ) in posts[page]" class="" :key="post._id">
+        <PostCard :post="post" :firstCard="index == 0 ? true : false" />
       </v-col>
     </v-row>
-    <v-row justify="center">
-      <v-col cols="8">
-        <v-container class="max-width">
+    <v-container v-show="total > 1">
+      <v-row>
+        <v-col>
           <v-bottom-navigation v-model="value" color="primary" active>
             <v-btn :disabled="page == 1" @click="paginationBack()">
               <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
-            <v-btn disabled>
+            <v-btn class="text-h6" disabled>
               {{ page }}
+
             </v-btn>
             <v-btn @click="paginationForward()" :disabled="page >= total || loading">
               <v-icon>mdi-arrow-right</v-icon>
             </v-btn>
           </v-bottom-navigation>
-        </v-container>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-container>
 
 </template>
@@ -35,7 +36,7 @@
 import sanity from "../client";
 
 const countTotal = `count(*[_type =='post'])`;
-const perPage = 4;
+const perPage = 5;
 const firstQuery = `*[_type == "post"] | order(_id) [0..${perPage - 1}]{
   _id,
   title,
@@ -60,6 +61,7 @@ export default {
       page: 1,
       total: 0,
       numberPosts: 0,
+      key: process.env.SANITY_PROJECT
     };
   },
   created() {
