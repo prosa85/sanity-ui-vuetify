@@ -1,19 +1,25 @@
 <template>
-  <div>
-    <div class="loading" v-if="loading">Loading...</div>
+  <v-container>
 
-    <div v-if="error" class="error">
-      {{ error }}
-    </div>
+    <v-row>
+      <div class="loading" v-if="loading">Loading...</div>
 
-    <div v-if="post" class="content">
-      <h1>{{ post.title }}</h1>
-      <img v-if="post.image" :src="imageUrlFor(post.image).width(480)" />
+      <div v-if="error" class="error">
+        {{ error }}
+      </div>
 
-      <h6>By: {{ post.name }}</h6>
-      <SanityBlocks :blocks="blocks" />
-    </div>
-  </div>
+      <v-col v-if="post" class="content">
+        <h1 class="text-h3 w-lg-66">{{ post.title }}</h1>
+        <v-img width="" v-if="post.image" :src="post.image.asset.url" height="600" class="mt-5 mb-10"></v-img>
+        <h6>By: <v-avatar size="45" class="ml-3 mr-2" v-if="authorImage" :image="authorImage"></v-avatar>
+          {{ post.author.name }}
+        </h6>
+        <div class="mt-5 post-content">
+          <SanityBlocks :blocks="blocks" />
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -34,8 +40,7 @@ const query = `*[slug.current == $slug] {
   url
 }
 },
-"name":author->name,
-"authorImage":author->image
+"author":author->{name, image}
 }[0]
 `;
 
@@ -47,11 +52,11 @@ export default {
       loading: true,
       post: [],
       blocks: [],
+      authorImage: '',
     };
   },
   created() {
     this.fetchData();
-    console.log(JSON.stringify(this.$route.params.SinglePost));
   },
   methods: {
     imageUrlFor(source) {
@@ -65,6 +70,7 @@ export default {
         (post) => {
           this.loading = false;
           this.post = post;
+          this.authorImage = this.imageUrlFor(post.author.image).url()
           this.blocks = post.body;
         },
         (error) => {
@@ -76,20 +82,25 @@ export default {
 };
 </script>
 
-<style scoped>
-.content {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  max-width: 42em;
-}
+<style>
+.post-content {
+  h2 {
+    padding: 20px 0;
+    font-size: 28px;
+  }
 
-h1 {
-  text-align: center;
-}
+  h3 {
+    font-size: 18px;
+    margin: 15px 0;
+  }
 
-h6 {
-  color: #aaa;
-  padding: 1em;
+  ul {
+    padding-left: 20px;
+    padding-top: 10px;
+  }
+
+  ul li {
+    margin: 5px 0;
+  }
 }
 </style>

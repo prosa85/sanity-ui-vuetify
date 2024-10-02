@@ -1,11 +1,11 @@
 <template>
   <h1 class="ma-6 text-h2 w-33">Welcome Altruist Sanity Blog</h1>
+  <div class="loading" v-if="loading">Loading...</div>
   <div v-if="error" class="error">
     {{ error }}
   </div>
-  <v-container>
+  <v-container v-else>
     <v-row>
-      <div class="loading" v-if="loading">Loading...</div>
       <v-col :lg="index == 0 ? 12 : 6" md="12" v-for="(post, index ) in posts[page]" class="" :key="post._id">
         <PostCard :post="post" :firstCard="index == 0 ? true : false" />
       </v-col>
